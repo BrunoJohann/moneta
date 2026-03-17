@@ -229,8 +229,14 @@ const auth = {
   },
 
   async logout() {
+    const refreshToken = typeof window !== 'undefined'
+      ? localStorage.getItem('moneta_refresh_token')
+      : null;
     try {
-      await fetchApi<void>('/auth/logout', { method: 'POST' });
+      await fetchApi<void>('/auth/logout', {
+        method: 'POST',
+        body: JSON.stringify({ refreshToken }),
+      });
     } finally {
       localStorage.removeItem('moneta_token');
       localStorage.removeItem('moneta_refresh_token');

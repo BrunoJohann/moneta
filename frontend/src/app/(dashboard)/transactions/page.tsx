@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { format, parseISO, startOfMonth, endOfMonth } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import {
   ChevronLeft,
@@ -58,14 +58,6 @@ const MONTHS = [
 ] as const;
 
 const ITEMS_PER_PAGE = 15;
-
-function buildDateRange(month: number, year: number) {
-  const date = new Date(year, month);
-  return {
-    startDate: format(startOfMonth(date), 'yyyy-MM-dd'),
-    endDate: format(endOfMonth(date), 'yyyy-MM-dd'),
-  };
-}
 
 // ── Skeleton loader ──────────────────────────────────────────────────
 
@@ -362,15 +354,14 @@ export default function TransactionsPage() {
   const fetchTransactions = useCallback(async () => {
     setLoading(true);
     try {
-      const { startDate, endDate } = buildDateRange(month, year);
       const params: Record<string, unknown> = {
-        startDate,
-        endDate,
+        month: month + 1,
+        year,
         page,
         limit: ITEMS_PER_PAGE,
       };
       if (typeFilter !== 'all') params.type = typeFilter;
-      if (categoryFilter !== 'all') params.category = categoryFilter;
+      if (categoryFilter !== 'all') params.categoryId = categoryFilter;
 
       const data = await api.transactions.list(
         params as Parameters<typeof api.transactions.list>[0],
