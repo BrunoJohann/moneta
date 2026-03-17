@@ -12,7 +12,18 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(rm -rf /Users/bruno.johann/Documents/code/own/Moneta/frontend/.git)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(git -C:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh auth:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(xargs ls:*)",
+      "Bash(ls -la /Users/bruno.johann/Documents/code/own/Moneta/frontend/src/app/\\\\\\(dashboard\\\\\\)/)",
+      "Bash(ls:*)",
+      "Bash(wc -l /Users/bruno.johann/Documents/code/own/Moneta/backend/src/**/*.ts)",
+      "Bash(wc -l /Users/bruno.johann/Documents/code/own/Moneta/frontend/src/**/*.tsx)"
     ]
   }
 }
