@@ -6,6 +6,7 @@ import { AiParserService } from './ai-parser.service.js';
 import { FallbackParserService } from './fallback-parser.service.js';
 import { OpenAIAdapter } from './adapters/openai.adapter.js';
 import { MockAiAdapter } from './adapters/mock-ai.adapter.js';
+import { AiProviderFactory } from './ai-provider.factory.js';
 
 @Module({
   providers: [
@@ -23,7 +24,12 @@ import { MockAiAdapter } from './adapters/mock-ai.adapter.js';
       inject: [ConfigService, FallbackParserService],
     },
     AiParserService,
+    {
+      provide: AiProviderFactory,
+      useFactory: (config: ConfigService) => new AiProviderFactory(config),
+      inject: [ConfigService],
+    },
   ],
-  exports: [AiParserService],
+  exports: [AiParserService, AiProviderFactory],
 })
 export class AiModule {}

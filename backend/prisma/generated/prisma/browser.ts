@@ -62,3 +62,18 @@ export type MessageLog = Prisma.MessageLogModel
  * 
  */
 export type AiInsight = Prisma.AiInsightModel
+/**
+ * Model ChatSession
+ * 
+ */
+export type ChatSession = Prisma.ChatSessionModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
+/**
+ * Model AiProviderConfig
+ * 
+ */
+export type AiProviderConfig = Prisma.AiProviderConfigModel

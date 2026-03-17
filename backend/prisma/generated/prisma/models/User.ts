@@ -214,6 +214,7 @@ export type UserWhereInput = {
   reminders?: Prisma.ReminderListRelationFilter
   messageLogs?: Prisma.MessageLogListRelationFilter
   aiInsights?: Prisma.AiInsightListRelationFilter
+  chatSessions?: Prisma.ChatSessionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type UserOrderByWithRelationInput = {
   reminders?: Prisma.ReminderOrderByRelationAggregateInput
   messageLogs?: Prisma.MessageLogOrderByRelationAggregateInput
   aiInsights?: Prisma.AiInsightOrderByRelationAggregateInput
+  chatSessions?: Prisma.ChatSessionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -255,6 +257,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   reminders?: Prisma.ReminderListRelationFilter
   messageLogs?: Prisma.MessageLogListRelationFilter
   aiInsights?: Prisma.AiInsightListRelationFilter
+  chatSessions?: Prisma.ChatSessionListRelationFilter
 }, "id" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -302,6 +305,7 @@ export type UserCreateInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -321,6 +325,7 @@ export type UserUncheckedCreateInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -340,6 +345,7 @@ export type UserUpdateInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -359,6 +365,7 @@ export type UserUncheckedUpdateInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -569,6 +576,20 @@ export type UserUpdateOneRequiredWithoutAiInsightsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAiInsightsInput, Prisma.UserUpdateWithoutAiInsightsInput>, Prisma.UserUncheckedUpdateWithoutAiInsightsInput>
 }
 
+export type UserCreateNestedOneWithoutChatSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatSessionsInput, Prisma.UserUncheckedCreateWithoutChatSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutChatSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatSessionsInput, Prisma.UserUncheckedCreateWithoutChatSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatSessionsInput
+  upsert?: Prisma.UserUpsertWithoutChatSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChatSessionsInput, Prisma.UserUpdateWithoutChatSessionsInput>, Prisma.UserUncheckedUpdateWithoutChatSessionsInput>
+}
+
 export type UserCreateWithoutAuthSessionsInput = {
   id?: string
   email: string
@@ -585,6 +606,7 @@ export type UserCreateWithoutAuthSessionsInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthSessionsInput = {
@@ -603,6 +625,7 @@ export type UserUncheckedCreateWithoutAuthSessionsInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthSessionsInput = {
@@ -637,6 +660,7 @@ export type UserUpdateWithoutAuthSessionsInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthSessionsInput = {
@@ -655,6 +679,7 @@ export type UserUncheckedUpdateWithoutAuthSessionsInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRefreshTokensInput = {
@@ -673,6 +698,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -691,6 +717,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -725,6 +752,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -743,6 +771,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoriesInput = {
@@ -761,6 +790,7 @@ export type UserCreateWithoutCategoriesInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoriesInput = {
@@ -779,6 +809,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoriesInput = {
@@ -813,6 +844,7 @@ export type UserUpdateWithoutCategoriesInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoriesInput = {
@@ -831,6 +863,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -849,6 +882,7 @@ export type UserCreateWithoutTransactionsInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -867,6 +901,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -901,6 +936,7 @@ export type UserUpdateWithoutTransactionsInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -919,6 +955,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGoalsInput = {
@@ -937,6 +974,7 @@ export type UserCreateWithoutGoalsInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGoalsInput = {
@@ -955,6 +993,7 @@ export type UserUncheckedCreateWithoutGoalsInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGoalsInput = {
@@ -989,6 +1028,7 @@ export type UserUpdateWithoutGoalsInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGoalsInput = {
@@ -1007,6 +1047,7 @@ export type UserUncheckedUpdateWithoutGoalsInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRemindersInput = {
@@ -1025,6 +1066,7 @@ export type UserCreateWithoutRemindersInput = {
   goals?: Prisma.GoalCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRemindersInput = {
@@ -1043,6 +1085,7 @@ export type UserUncheckedCreateWithoutRemindersInput = {
   goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRemindersInput = {
@@ -1077,6 +1120,7 @@ export type UserUpdateWithoutRemindersInput = {
   goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRemindersInput = {
@@ -1095,6 +1139,7 @@ export type UserUncheckedUpdateWithoutRemindersInput = {
   goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMessageLogsInput = {
@@ -1113,6 +1158,7 @@ export type UserCreateWithoutMessageLogsInput = {
   goals?: Prisma.GoalCreateNestedManyWithoutUserInput
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMessageLogsInput = {
@@ -1131,6 +1177,7 @@ export type UserUncheckedCreateWithoutMessageLogsInput = {
   goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMessageLogsInput = {
@@ -1165,6 +1212,7 @@ export type UserUpdateWithoutMessageLogsInput = {
   goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessageLogsInput = {
@@ -1183,6 +1231,7 @@ export type UserUncheckedUpdateWithoutMessageLogsInput = {
   goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAiInsightsInput = {
@@ -1201,6 +1250,7 @@ export type UserCreateWithoutAiInsightsInput = {
   goals?: Prisma.GoalCreateNestedManyWithoutUserInput
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAiInsightsInput = {
@@ -1219,6 +1269,7 @@ export type UserUncheckedCreateWithoutAiInsightsInput = {
   goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAiInsightsInput = {
@@ -1253,6 +1304,7 @@ export type UserUpdateWithoutAiInsightsInput = {
   goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiInsightsInput = {
@@ -1271,6 +1323,99 @@ export type UserUncheckedUpdateWithoutAiInsightsInput = {
   goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutChatSessionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  phone?: string | null
+  whatsappVerified?: boolean
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
+  messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
+  aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutChatSessionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  phone?: string | null
+  whatsappVerified?: boolean
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
+  messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
+  aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutChatSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatSessionsInput, Prisma.UserUncheckedCreateWithoutChatSessionsInput>
+}
+
+export type UserUpsertWithoutChatSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChatSessionsInput, Prisma.UserUncheckedUpdateWithoutChatSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatSessionsInput, Prisma.UserUncheckedCreateWithoutChatSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChatSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChatSessionsInput, Prisma.UserUncheckedUpdateWithoutChatSessionsInput>
+}
+
+export type UserUpdateWithoutChatSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
+  messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
+  aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChatSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
+  messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
+  aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1287,6 +1432,7 @@ export type UserCountOutputType = {
   reminders: number
   messageLogs: number
   aiInsights: number
+  chatSessions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1298,6 +1444,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   reminders?: boolean | UserCountOutputTypeCountRemindersArgs
   messageLogs?: boolean | UserCountOutputTypeCountMessageLogsArgs
   aiInsights?: boolean | UserCountOutputTypeCountAiInsightsArgs
+  chatSessions?: boolean | UserCountOutputTypeCountChatSessionsArgs
 }
 
 /**
@@ -1366,6 +1513,13 @@ export type UserCountOutputTypeCountAiInsightsArgs<ExtArgs extends runtime.Types
   where?: Prisma.AiInsightWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountChatSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatSessionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1384,6 +1538,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   reminders?: boolean | Prisma.User$remindersArgs<ExtArgs>
   messageLogs?: boolean | Prisma.User$messageLogsArgs<ExtArgs>
   aiInsights?: boolean | Prisma.User$aiInsightsArgs<ExtArgs>
+  chatSessions?: boolean | Prisma.User$chatSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1430,6 +1585,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   reminders?: boolean | Prisma.User$remindersArgs<ExtArgs>
   messageLogs?: boolean | Prisma.User$messageLogsArgs<ExtArgs>
   aiInsights?: boolean | Prisma.User$aiInsightsArgs<ExtArgs>
+  chatSessions?: boolean | Prisma.User$chatSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1446,6 +1602,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     reminders: Prisma.$ReminderPayload<ExtArgs>[]
     messageLogs: Prisma.$MessageLogPayload<ExtArgs>[]
     aiInsights: Prisma.$AiInsightPayload<ExtArgs>[]
+    chatSessions: Prisma.$ChatSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1858,6 +2015,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   reminders<T extends Prisma.User$remindersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messageLogs<T extends Prisma.User$messageLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messageLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiInsights<T extends Prisma.User$aiInsightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiInsightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiInsightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chatSessions<T extends Prisma.User$chatSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2472,6 +2630,30 @@ export type User$aiInsightsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.AiInsightScalarFieldEnum | Prisma.AiInsightScalarFieldEnum[]
+}
+
+/**
+ * User.chatSessions
+ */
+export type User$chatSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChatSession
+   */
+  select?: Prisma.ChatSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChatSession
+   */
+  omit?: Prisma.ChatSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatSessionInclude<ExtArgs> | null
+  where?: Prisma.ChatSessionWhereInput
+  orderBy?: Prisma.ChatSessionOrderByWithRelationInput | Prisma.ChatSessionOrderByWithRelationInput[]
+  cursor?: Prisma.ChatSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatSessionScalarFieldEnum | Prisma.ChatSessionScalarFieldEnum[]
 }
 
 /**

@@ -7,6 +7,7 @@ import {
   ArrowLeftRight,
   Target,
   Lightbulb,
+  MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +16,7 @@ const navItems = [
   { href: '/transactions', label: 'Transações', icon: ArrowLeftRight },
   { href: '/goals', label: 'Metas', icon: Target },
   { href: '/insights', label: 'Insights', icon: Lightbulb },
+  { href: '/chat', label: 'Chat', icon: MessageSquare },
 ];
 
 export function BottomNav() {

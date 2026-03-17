@@ -49,6 +49,7 @@ export const validationSchema = Joi.object({
 
   FRONTEND_URL: Joi.string().uri().required(),
   PORT: Joi.number().default(3001),
+  ADMIN_EMAILS: Joi.string().default(''),
 });
 
 export interface AppConfig {
@@ -67,6 +68,7 @@ export interface AppConfig {
   smtp: { host: string; port: number };
   frontendUrl: string;
   port: number;
+  adminEmails: string[];
 }
 
 export const configuration = (): AppConfig => ({
@@ -99,4 +101,8 @@ export const configuration = (): AppConfig => ({
   },
   frontendUrl: process.env.FRONTEND_URL!,
   port: parseInt(process.env.PORT ?? '3001', 10),
+  adminEmails: (process.env.ADMIN_EMAILS ?? '')
+    .split(',')
+    .map((e) => e.trim())
+    .filter(Boolean),
 });

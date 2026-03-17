@@ -23,7 +23,12 @@
       "Bash(ls -la /Users/bruno.johann/Documents/code/own/Moneta/frontend/src/app/\\\\\\(dashboard\\\\\\)/)",
       "Bash(ls:*)",
       "Bash(wc -l /Users/bruno.johann/Documents/code/own/Moneta/backend/src/**/*.ts)",
-      "Bash(wc -l /Users/bruno.johann/Documents/code/own/Moneta/frontend/src/**/*.tsx)"
+      "Bash(wc -l /Users/bruno.johann/Documents/code/own/Moneta/frontend/src/**/*.tsx)",
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(wc:*)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''''exports'''',{}\\), indent=2\\)\\)\")",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

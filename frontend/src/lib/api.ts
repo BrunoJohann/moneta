@@ -70,6 +70,7 @@ export interface User {
   name?: string;
   currency?: string;
   createdAt: string;
+  isAdmin?: boolean;
 }
 
 export interface AuthTokens {
@@ -82,10 +83,27 @@ export interface Transaction {
   id: string;
   amount: number;
   type: 'income' | 'expense';
-  category: string;
-  description?: string;
+  category: string | null;
+  categoryId: string | null;
+  description: string;
   date: string;
   createdAt: string;
+}
+
+export interface CreateTransactionInput {
+  type: 'INCOME' | 'EXPENSE';
+  amount: number;
+  description: string;
+  categoryId?: string;
+  date?: string;
+}
+
+export interface UpdateTransactionInput {
+  type?: 'INCOME' | 'EXPENSE';
+  amount?: number;
+  description?: string;
+  categoryId?: string;
+  date?: string;
 }
 
 export interface TransactionSummary {
@@ -188,11 +206,10 @@ export interface Forecast {
 export interface TransactionListParams {
   page?: number;
   limit?: number;
-  type?: 'income' | 'expense';
-  category?: string;
-  startDate?: string;
-  endDate?: string;
-  search?: string;
+  type?: 'INCOME' | 'EXPENSE';
+  categoryId?: string;
+  month?: number;
+  year?: number;
 }
 
 export interface PaginatedResponse<T> {
@@ -280,14 +297,14 @@ const transactions = {
     return fetchApi<WeeklyTotal[]>(`/transactions/weekly?year=${year}&month=${month}`);
   },
 
-  create(data: Omit<Transaction, 'id' | 'createdAt'>) {
+  create(data: CreateTransactionInput) {
     return fetchApi<Transaction>('/transactions', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   },
 
-  update(id: string, data: Partial<Omit<Transaction, 'id' | 'createdAt'>>) {
+  update(id: string, data: UpdateTransactionInput) {
     return fetchApi<Transaction>(`/transactions/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
@@ -393,6 +410,116 @@ const dashboard = {
   },
 };
 
+// --- Chat Types ---
+
+export interface ChatSession {
+  id: string;
+  title: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { messages: number };
+}
+
+export interface ChatMessage {
+  id: string;
+  sessionId: string;
+  role: 'USER' | 'ASSISTANT';
+  content: string;
+  createdAt: string;
+}
+
+export interface ChatSessionWithMessages extends ChatSession {
+  messages: ChatMessage[];
+}
+
+export interface AudioMessageResult {
+  transcribedText: string;
+  assistantMessage: ChatMessage;
+}
+
+export interface AiSettingsConfig {
+  provider: 'OPENAI' | 'ANTHROPIC';
+  model: string | null;
+}
+
+export interface AiProviderInfo {
+  name: string;
+  models: string[];
+  defaultModel: string;
+}
+
+// --- Chat & AI Settings Namespaces ---
+
+const chat = {
+  listSessions() {
+    return fetchApi<ChatSession[]>('/chat/sessions');
+  },
+
+  createSession(title?: string) {
+    return fetchApi<ChatSession>('/chat/sessions', {
+      method: 'POST',
+      body: JSON.stringify({ title }),
+    });
+  },
+
+  getSession(id: string) {
+    return fetchApi<ChatSessionWithMessages>(`/chat/sessions/${id}`);
+  },
+
+  deleteSession(id: string) {
+    return fetchApi<void>(`/chat/sessions/${id}`, { method: 'DELETE' });
+  },
+
+  sendMessage(sessionId: string, content: string) {
+    return fetchApi<ChatMessage>(`/chat/sessions/${sessionId}/messages`, {
+      method: 'POST',
+      body: JSON.stringify({ content }),
+    });
+  },
+
+  async sendAudio(sessionId: string, audioBlob: Blob): Promise<AudioMessageResult> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('moneta_token') : null;
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'recording.webm');
+
+    const res = await fetch(`${API_URL}/chat/sessions/${sessionId}/audio`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    });
+
+    if (res.status === 401) {
+      const refreshed = await tryRefreshToken();
+      if (refreshed) return chat.sendAudio(sessionId, audioBlob);
+      throw new Error('Unauthorized');
+    }
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ message: 'Request failed' }));
+      throw new Error(error.message || `HTTP ${res.status}`);
+    }
+
+    return res.json();
+  },
+};
+
+const aiSettings = {
+  get() {
+    return fetchApi<AiSettingsConfig>('/ai-settings');
+  },
+
+  update(data: AiSettingsConfig) {
+    return fetchApi<AiSettingsConfig>('/ai-settings', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  listProviders() {
+    return fetchApi<AiProviderInfo[]>('/ai-settings/providers');
+  },
+};
+
 export const api = {
   auth,
   messages,
@@ -404,4 +531,6 @@ export const api = {
   users,
   forecast,
   dashboard,
+  chat,
+  aiSettings,
 };

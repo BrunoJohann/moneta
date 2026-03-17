@@ -1,16 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { UpdateProfileDto } from './dto/update-profile.dto.js';
+import type { AppConfig } from '../../common/config/configuration.js';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigService<AppConfig>,
+  ) {}
 
   async findById(id: string) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User not found');
-    return user;
+    const adminEmails = this.config.get<string[]>('adminEmails') ?? [];
+    return { ...user, isAdmin: adminEmails.includes(user.email) };
   }
 
   async findByEmail(email: string) {

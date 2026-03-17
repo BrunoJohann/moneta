@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Filter,
   Loader2,
+  Plus,
   Receipt,
   Trash2,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ import {
   type Transaction,
   type Category,
   type PaginatedResponse,
+  type TransactionListParams,
 } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { formatCurrency } from '@/components/shared/currency';
@@ -156,6 +158,148 @@ function TransactionCard({
   );
 }
 
+// ── Create dialog ─────────────────────────────────────────────────────
+
+function CreateTransactionDialog({
+  categories,
+  open,
+  onOpenChange,
+  onCreated,
+}: {
+  categories: Category[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCreated: () => void;
+}) {
+  const today = new Date().toISOString().slice(0, 10);
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [type, setType] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
+  const [date, setDate] = useState(today);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  function reset() {
+    setDescription('');
+    setAmount('');
+    setCategoryId('');
+    setType('EXPENSE');
+    setDate(today);
+    setError('');
+  }
+
+  async function handleCreate() {
+    if (!description.trim()) { setError('Informe a descrição.'); return; }
+    if (!amount || Number(amount) <= 0) { setError('Informe um valor maior que zero.'); return; }
+    setSaving(true);
+    setError('');
+    try {
+      await api.transactions.create({
+        description,
+        amount: Number(amount),
+        categoryId: categoryId || undefined,
+        type,
+        date,
+      });
+      reset();
+      onOpenChange(false);
+      onCreated();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Erro ao criar transação.');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => { if (!v) reset(); onOpenChange(v); }}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Nova transação</DialogTitle>
+          <DialogDescription>Preencha os dados da nova transação.</DialogDescription>
+        </DialogHeader>
+
+        <div className="grid gap-4 py-2">
+          <div className="grid gap-2">
+            <Label htmlFor="create-description">Descrição</Label>
+            <Input
+              id="create-description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Ex: Almoço no restaurante"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="create-amount">Valor</Label>
+              <Input
+                id="create-amount"
+                type="number"
+                min="0"
+                step="0.01"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0,00"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>Tipo</Label>
+              <Select value={type} onValueChange={(v) => setType(v as 'INCOME' | 'EXPENSE')}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="INCOME">Receita</SelectItem>
+                  <SelectItem value="EXPENSE">Despesa</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label>Categoria</Label>
+              <Select value={categoryId} onValueChange={setCategoryId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.icon ? `${c.icon} ` : ''}
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="create-date">Data</Label>
+              <Input
+                id="create-date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {error && <p className="text-sm text-destructive">{error}</p>}
+        </div>
+
+        <DialogFooter>
+          <Button onClick={handleCreate} disabled={saving}>
+            {saving && <Loader2 className="h-4 w-4 animate-spin mr-1" />}
+            Criar transação
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ── Edit dialog ──────────────────────────────────────────────────────
 
 function EditTransactionDialog({
@@ -173,8 +317,8 @@ function EditTransactionDialog({
 }) {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
-  const [type, setType] = useState<'income' | 'expense'>('expense');
+  const [categoryId, setCategoryId] = useState('');
+  const [type, setType] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
   const [date, setDate] = useState('');
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -184,8 +328,8 @@ function EditTransactionDialog({
     if (transaction) {
       setDescription(transaction.description ?? '');
       setAmount(String(transaction.amount));
-      setCategory(transaction.category ?? '');
-      setType(transaction.type);
+      setCategoryId(transaction.categoryId ?? '');
+      setType(transaction.type.toUpperCase() as 'INCOME' | 'EXPENSE');
       setDate(transaction.date.slice(0, 10));
       setConfirmDelete(false);
     }
@@ -198,7 +342,7 @@ function EditTransactionDialog({
       await api.transactions.update(transaction.id, {
         description,
         amount: Number(amount),
-        category,
+        categoryId: categoryId || undefined,
         type,
         date,
       });
@@ -261,14 +405,14 @@ function EditTransactionDialog({
               <Label>Tipo</Label>
               <Select
                 value={type}
-                onValueChange={(v) => setType(v as 'income' | 'expense')}
+                onValueChange={(v) => setType(v as 'INCOME' | 'EXPENSE')}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="income">Receita</SelectItem>
-                  <SelectItem value="expense">Despesa</SelectItem>
+                  <SelectItem value="INCOME">Receita</SelectItem>
+                  <SelectItem value="EXPENSE">Despesa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -277,13 +421,13 @@ function EditTransactionDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label>Categoria</Label>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={categoryId} onValueChange={setCategoryId}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((c) => (
-                    <SelectItem key={c.id} value={c.name}>
+                    <SelectItem key={c.id} value={c.id}>
                       {c.icon ? `${c.icon} ` : ''}
                       {c.name}
                     </SelectItem>
@@ -350,22 +494,21 @@ export default function TransactionsPage() {
 
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const fetchTransactions = useCallback(async () => {
     setLoading(true);
     try {
-      const params: Record<string, unknown> = {
+      const params: TransactionListParams = {
         month: month + 1,
         year,
         page,
         limit: ITEMS_PER_PAGE,
       };
-      if (typeFilter !== 'all') params.type = typeFilter;
+      if (typeFilter !== 'all') params.type = typeFilter.toUpperCase() as 'INCOME' | 'EXPENSE';
       if (categoryFilter !== 'all') params.categoryId = categoryFilter;
 
-      const data = await api.transactions.list(
-        params as Parameters<typeof api.transactions.list>[0],
-      );
+      const data = await api.transactions.list(params);
       setResult(data);
     } finally {
       setLoading(false);
@@ -407,15 +550,21 @@ export default function TransactionsPage() {
             {total === 1 ? 'transação' : 'transações'}
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="sm:hidden"
-          onClick={() => setShowFilters((v) => !v)}
-        >
-          <Filter className="h-4 w-4 mr-2" />
-          Filtros
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="sm:hidden"
+            onClick={() => setShowFilters((v) => !v)}
+          >
+            <Filter className="h-4 w-4 mr-2" />
+            Filtros
+          </Button>
+          <Button size="sm" onClick={() => setIsCreateOpen(true)}>
+            <Plus className="h-4 w-4 mr-1" />
+            Nova transação
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -477,7 +626,7 @@ export default function TransactionsPage() {
               <SelectContent>
                 <SelectItem value="all">Todas</SelectItem>
                 {categories.map((c) => (
-                  <SelectItem key={c.id} value={c.name}>
+                  <SelectItem key={c.id} value={c.id}>
                     {c.icon ? `${c.icon} ` : ''}
                     {c.name}
                   </SelectItem>
@@ -567,6 +716,14 @@ export default function TransactionsPage() {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onSaved={fetchTransactions}
+      />
+
+      {/* Create dialog */}
+      <CreateTransactionDialog
+        categories={categories}
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        onCreated={fetchTransactions}
       />
     </div>
   );

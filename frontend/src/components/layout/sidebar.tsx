@@ -8,6 +8,8 @@ import {
   ArrowLeftRight,
   Target,
   Lightbulb,
+  MessageSquare,
+  Settings,
   LogOut,
   Moon,
   Sun,
@@ -24,6 +26,8 @@ const navItems = [
   { href: '/transactions', label: 'Transações', icon: ArrowLeftRight },
   { href: '/goals', label: 'Metas', icon: Target },
   { href: '/insights', label: 'Insights', icon: Lightbulb },
+  { href: '/chat', label: 'Chat', icon: MessageSquare },
+  { href: '/settings', label: 'Configurações', icon: Settings },
 ];
 
 export function Sidebar() {

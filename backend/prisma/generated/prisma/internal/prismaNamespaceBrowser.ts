@@ -59,7 +59,10 @@ export const ModelName = {
   Goal: 'Goal',
   Reminder: 'Reminder',
   MessageLog: 'MessageLog',
-  AiInsight: 'AiInsight'
+  AiInsight: 'AiInsight',
+  ChatSession: 'ChatSession',
+  ChatMessage: 'ChatMessage',
+  AiProviderConfig: 'AiProviderConfig'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -206,6 +209,40 @@ export const AiInsightScalarFieldEnum = {
 } as const
 
 export type AiInsightScalarFieldEnum = (typeof AiInsightScalarFieldEnum)[keyof typeof AiInsightScalarFieldEnum]
+
+
+export const ChatSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatSessionScalarFieldEnum = (typeof ChatSessionScalarFieldEnum)[keyof typeof ChatSessionScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  role: 'role',
+  content: 'content',
+  transcribedFrom: 'transcribedFrom',
+  createdAt: 'createdAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const AiProviderConfigScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  model: 'model',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiProviderConfigScalarFieldEnum = (typeof AiProviderConfigScalarFieldEnum)[keyof typeof AiProviderConfigScalarFieldEnum]
 
 
 export const SortOrder = {

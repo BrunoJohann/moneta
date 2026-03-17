@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator tsClient {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
 datasource db {
   provider = "postgresql"
 }
@@ -52,14 +57,15 @@ model User {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  authSessions    AuthSession[]
-  refreshTokens   RefreshToken[]
-  transactions    Transaction[]
-  categories      Category[]
-  goals           Goal[]
-  reminders       Reminder[]
-  messageLogs     MessageLog[]
-  aiInsights      AiInsight[]
+  authSessions      AuthSession[]
+  refreshTokens     RefreshToken[]
+  transactions      Transaction[]
+  categories        Category[]
+  goals             Goal[]
+  reminders         Reminder[]
+  messageLogs       MessageLog[]
+  aiInsights        AiInsight[]
+  chatSessions      ChatSession[]
 
   @@map("users")
 }
@@ -208,4 +214,52 @@ model AiInsight {
 
   @@index([userId, createdAt])
   @@map("ai_insights")
+}
+
+enum AiProvider {
+  OPENAI
+  ANTHROPIC
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+}
+
+model ChatSession {
+  id        String        @id @default(cuid())
+  userId    String
+  title     String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@index([userId, createdAt])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id              String   @id @default(cuid())
+  sessionId       String
+  role            ChatRole
+  content         String
+  transcribedFrom String?  // populated when content was transcribed from audio
+  createdAt       DateTime @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("chat_messages")
+}
+
+model AiProviderConfig {
+  id        String     @id @default(cuid())
+  provider  AiProvider @default(OPENAI)
+  model     String?
+  updatedBy String?
+  updatedAt DateTime   @updatedAt
+
+  @@map("ai_provider_configs")
 }

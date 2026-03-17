@@ -61,3 +61,19 @@ export const RecurrenceType = {
 } as const
 
 export type RecurrenceType = (typeof RecurrenceType)[keyof typeof RecurrenceType]
+
+
+export const AiProvider = {
+  OPENAI: 'OPENAI',
+  ANTHROPIC: 'ANTHROPIC'
+} as const
+
+export type AiProvider = (typeof AiProvider)[keyof typeof AiProvider]
+
+
+export const ChatRole = {
+  USER: 'USER',
+  ASSISTANT: 'ASSISTANT'
+} as const
+
+export type ChatRole = (typeof ChatRole)[keyof typeof ChatRole]
