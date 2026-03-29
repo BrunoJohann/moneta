@@ -54,6 +54,8 @@ export const validationSchema = Joi.object({
   GOOGLE_CLIENT_ID: Joi.string().optional(),
   GOOGLE_CLIENT_SECRET: Joi.string().optional(),
   GOOGLE_CALLBACK_URL: Joi.string().optional(),
+
+  GROQ_API_KEY: Joi.string().optional(),
 });
 
 export interface AppConfig {
@@ -62,6 +64,7 @@ export interface AppConfig {
   redis: { url: string };
   jwt: { secret: string; refreshSecret: string };
   openai: { apiKey: string };
+  groq: { apiKey: string };
   whatsapp: {
     token: string;
     verifyToken: string;
@@ -90,6 +93,9 @@ export const configuration = (): AppConfig => ({
   },
   openai: {
     apiKey: process.env.OPENAI_API_KEY ?? '',
+  },
+  groq: {
+    apiKey: process.env.GROQ_API_KEY ?? '',
   },
   whatsapp: {
     token: process.env.WHATSAPP_TOKEN ?? '',

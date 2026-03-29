@@ -4,8 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import type { IAiChatProvider } from './interfaces/ai-chat-provider.interface.js';
 import { OpenAiChatAdapter } from './adapters/openai-chat.adapter.js';
 import { AnthropicChatAdapter } from './adapters/anthropic-chat.adapter.js';
+import { GroqChatAdapter } from './adapters/groq-chat.adapter.js';
 
-export type AiProviderName = 'openai' | 'anthropic';
+export type AiProviderName = 'openai' | 'anthropic' | 'groq';
 
 @Injectable()
 export class AiProviderFactory {
@@ -15,6 +16,7 @@ export class AiProviderFactory {
   constructor(config: ConfigService) {
     this.providers.set('openai', new OpenAiChatAdapter(config));
     this.providers.set('anthropic', new AnthropicChatAdapter(config));
+    this.providers.set('groq', new GroqChatAdapter(config));
   }
 
   getProvider(name: AiProviderName = 'openai'): IAiChatProvider {

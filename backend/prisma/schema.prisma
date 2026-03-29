@@ -221,6 +221,7 @@ model AiInsight {
 enum AiProvider {
   OPENAI
   ANTHROPIC
+  GROQ
 }
 
 enum ChatRole {
