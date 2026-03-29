@@ -438,13 +438,20 @@ export interface AudioMessageResult {
 }
 
 export interface AiSettingsConfig {
-  provider: 'OPENAI' | 'ANTHROPIC';
+  provider: 'OPENAI' | 'ANTHROPIC' | 'GROQ';
   model: string | null;
+  transcriptionProvider: 'OPENAI' | 'ANTHROPIC' | 'GROQ';
+  transcriptionModel: string | null;
 }
 
 export interface AiProviderInfo {
   name: string;
   models: string[];
+  defaultModel: string;
+}
+
+export interface AiTranscriptionProviderInfo {
+  name: string;
   defaultModel: string;
 }
 
@@ -517,6 +524,10 @@ const aiSettings = {
 
   listProviders() {
     return fetchApi<AiProviderInfo[]>('/ai-settings/providers');
+  },
+
+  listTranscriptionProviders() {
+    return fetchApi<AiTranscriptionProviderInfo[]>('/ai-settings/transcription-providers');
   },
 };
 

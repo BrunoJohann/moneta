@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { api, type AiSettingsConfig, type AiProviderInfo } from '@/lib/api';
+import { api, type AiSettingsConfig, type AiProviderInfo, type AiTranscriptionProviderInfo } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
-import { Loader2, Save, Bot } from 'lucide-react';
+import { Loader2, Save, Bot, Mic } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -20,8 +20,12 @@ export default function SettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useState<AiSettingsConfig | null>(null);
   const [providers, setProviders] = useState<AiProviderInfo[]>([]);
+  const [transcriptionProviders, setTranscriptionProviders] = useState<AiTranscriptionProviderInfo[]>([]);
+
   const [selectedProvider, setSelectedProvider] = useState<string>('openai');
   const [selectedModel, setSelectedModel] = useState<string>('');
+  const [selectedTranscriptionProvider, setSelectedTranscriptionProvider] = useState<string>('openai');
+
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,14 +38,17 @@ export default function SettingsPage() {
   useEffect(() => {
     async function load() {
       try {
-        const [cfg, providerList] = await Promise.all([
+        const [cfg, providerList, transcriptionList] = await Promise.all([
           api.aiSettings.get(),
           api.aiSettings.listProviders(),
+          api.aiSettings.listTranscriptionProviders(),
         ]);
         setSettings(cfg);
         setProviders(providerList);
+        setTranscriptionProviders(transcriptionList);
         setSelectedProvider(cfg.provider.toLowerCase());
         setSelectedModel(cfg.model ?? '');
+        setSelectedTranscriptionProvider(cfg.transcriptionProvider.toLowerCase());
       } catch {
         toast.error('Erro ao carregar configurações');
       } finally {
@@ -59,6 +66,8 @@ export default function SettingsPage() {
       await api.aiSettings.update({
         provider: selectedProvider.toUpperCase() as AiSettingsConfig['provider'],
         model: selectedModel || null,
+        transcriptionProvider: selectedTranscriptionProvider.toUpperCase() as AiSettingsConfig['transcriptionProvider'],
+        transcriptionModel: null,
       });
       toast.success('Configurações salvas');
     } catch {
@@ -83,24 +92,20 @@ export default function SettingsPage() {
         <p className="text-muted-foreground">Configurações do assistente de IA do Moneta</p>
       </div>
 
-      <div className="rounded-xl border bg-card p-6 space-y-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-            <Bot className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <h2 className="font-semibold">Provedor de IA</h2>
-            <p className="text-sm text-muted-foreground">
-              {user?.isAdmin
-                ? 'Escolha qual modelo de IA será usado no chat'
-                : 'Configuração global do assistente de IA'}
-            </p>
-          </div>
-        </div>
+      {user?.isAdmin ? (
+        <>
+          {/* Chat provider */}
+          <div className="rounded-xl border bg-card p-6 space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Bot className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="font-semibold">Provedor de Chat</h2>
+                <p className="text-sm text-muted-foreground">Modelo usado nas conversas do assistente</p>
+              </div>
+            </div>
 
-        {user?.isAdmin ? (
-          <>
-            {/* Provider selection */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Provedor</label>
               <div className="grid grid-cols-2 gap-3">
@@ -130,7 +135,6 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            {/* Model selection */}
             {activeProvider && (
               <div className="space-y-2">
                 <label className="text-sm font-medium">Modelo</label>
@@ -163,36 +167,85 @@ export default function SettingsPage() {
                 e configure <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded">ANTHROPIC_API_KEY</code> no .env.
               </div>
             )}
+          </div>
 
-            <Button onClick={save} disabled={isSaving} className="w-full sm:w-auto">
-              {isSaving ? (
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-              ) : (
-                <Save className="h-4 w-4 mr-2" />
-              )}
-              Salvar configurações
-            </Button>
-          </>
-        ) : (
-          <div className="space-y-3">
-            <div className="rounded-lg border bg-muted/40 px-4 py-3 text-sm">
-              <span className="text-muted-foreground">Provedor ativo: </span>
+          {/* Transcription provider */}
+          <div className="rounded-xl border bg-card p-6 space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Mic className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="font-semibold">Provedor de Transcrição</h2>
+                <p className="text-sm text-muted-foreground">Modelo usado para transcrever mensagens de áudio</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {transcriptionProviders.map((provider) => (
+                <button
+                  key={provider.name}
+                  onClick={() => setSelectedTranscriptionProvider(provider.name)}
+                  className={cn(
+                    'flex flex-col items-start rounded-lg border p-4 text-left transition-colors',
+                    selectedTranscriptionProvider === provider.name
+                      ? 'border-primary bg-primary/5'
+                      : 'hover:bg-accent',
+                  )}
+                >
+                  <span className="font-medium text-sm">
+                    {PROVIDER_LABELS[provider.name] ?? provider.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground mt-0.5">
+                    {provider.defaultModel}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Button onClick={save} disabled={isSaving} className="w-full sm:w-auto">
+            {isSaving ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
+            Salvar configurações
+          </Button>
+        </>
+      ) : (
+        <div className="rounded-xl border bg-card p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Bot className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="font-semibold">Provedor de IA</h2>
+              <p className="text-sm text-muted-foreground">Configuração global do assistente de IA</p>
+            </div>
+          </div>
+          <div className="rounded-lg border bg-muted/40 px-4 py-3 text-sm space-y-1">
+            <div>
+              <span className="text-muted-foreground">Chat: </span>
               <span className="font-medium">
                 {PROVIDER_LABELS[settings?.provider.toLowerCase() ?? 'openai'] ?? settings?.provider}
               </span>
               {settings?.model && (
-                <>
-                  <span className="text-muted-foreground"> / </span>
-                  <span className="font-medium">{settings.model}</span>
-                </>
+                <span className="text-muted-foreground"> / {settings.model}</span>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">
-              A configuração do provedor de IA é gerenciada pelos administradores do Moneta.
-            </p>
+            <div>
+              <span className="text-muted-foreground">Transcrição: </span>
+              <span className="font-medium">
+                {PROVIDER_LABELS[settings?.transcriptionProvider.toLowerCase() ?? 'openai'] ?? settings?.transcriptionProvider}
+              </span>
+            </div>
           </div>
-        )}
-      </div>
+          <p className="text-xs text-muted-foreground">
+            A configuração do provedor de IA é gerenciada pelos administradores do Moneta.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

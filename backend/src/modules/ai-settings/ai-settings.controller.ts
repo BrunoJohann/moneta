@@ -30,4 +30,9 @@ export class AiSettingsController {
   listProviders() {
     return this.aiSettingsService.listProviders();
   }
+
+  @Get('transcription-providers')
+  listTranscriptionProviders() {
+    return this.aiSettingsService.listTranscriptionProviders();
+  }
 }

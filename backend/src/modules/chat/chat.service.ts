@@ -357,8 +357,8 @@ export class ChatService {
     if (session.userId !== userId) throw new ForbiddenException();
 
     const providerConfig = await this.prisma.aiProviderConfig.findFirst();
-    const providerName = (providerConfig?.provider?.toLowerCase() ?? 'openai') as 'openai' | 'anthropic' | 'groq';
-    const transcriptionProvider = this.aiProviderFactory.getTranscriptionProvider(providerName);
+    const transcriptionProviderName = (providerConfig?.transcriptionProvider?.toLowerCase() ?? 'openai') as 'openai' | 'anthropic' | 'groq';
+    const transcriptionProvider = this.aiProviderFactory.getTranscriptionProvider(transcriptionProviderName);
 
     let transcribedText: string;
     try {

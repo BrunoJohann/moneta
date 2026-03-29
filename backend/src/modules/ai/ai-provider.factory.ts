@@ -43,4 +43,10 @@ export class AiProviderFactory {
       defaultModel: p.defaultModel,
     }));
   }
+
+  listTranscriptionProviders(): Array<{ name: string; defaultModel: string }> {
+    return Array.from(this.providers.values())
+      .filter((p) => !!p.transcribeAudio)
+      .map((p) => ({ name: p.providerName, defaultModel: p.defaultModel }));
+  }
 }
