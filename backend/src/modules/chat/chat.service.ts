@@ -356,7 +356,9 @@ export class ChatService {
     if (!session) throw new NotFoundException('Sessão não encontrada');
     if (session.userId !== userId) throw new ForbiddenException();
 
-    const transcriptionProvider = this.aiProviderFactory.getTranscriptionProvider();
+    const providerConfig = await this.prisma.aiProviderConfig.findFirst();
+    const providerName = (providerConfig?.provider?.toLowerCase() ?? 'openai') as 'openai' | 'anthropic' | 'groq';
+    const transcriptionProvider = this.aiProviderFactory.getTranscriptionProvider(providerName);
 
     let transcribedText: string;
     try {

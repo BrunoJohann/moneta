@@ -91,4 +91,23 @@ export class GroqChatAdapter implements IAiChatProvider {
         : undefined,
     };
   }
+
+  async transcribeAudio(audioBuffer: Buffer, mimeType: string): Promise<string> {
+    const extension = mimeType.includes('webm') ? 'webm' : mimeType.includes('mp4') ? 'mp4' : 'wav';
+    const filename = `audio.${extension}`;
+
+    const arrayBuffer = audioBuffer.buffer.slice(
+      audioBuffer.byteOffset,
+      audioBuffer.byteOffset + audioBuffer.byteLength,
+    ) as ArrayBuffer;
+    const file = new File([arrayBuffer], filename, { type: mimeType });
+
+    const transcription = await this.client.audio.transcriptions.create({
+      file,
+      model: 'whisper-large-v3',
+      language: 'pt',
+    });
+
+    return transcription.text;
+  }
 }

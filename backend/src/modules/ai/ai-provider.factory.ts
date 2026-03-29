@@ -28,8 +28,11 @@ export class AiProviderFactory {
     return provider;
   }
 
-  getTranscriptionProvider(): IAiChatProvider {
-    // OpenAI Whisper is the only transcription option currently
+  getTranscriptionProvider(preferredProvider?: AiProviderName): IAiChatProvider {
+    if (preferredProvider) {
+      const preferred = this.providers.get(preferredProvider);
+      if (preferred?.transcribeAudio) return preferred;
+    }
     return this.providers.get('openai')!;
   }
 
