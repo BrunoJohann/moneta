@@ -91,6 +91,37 @@ export class AuthService {
     return this.generateTokens(user.id, user.email);
   }
 
+  async handleGoogleAuth(profile: {
+    googleId: string;
+    email: string;
+    name: string;
+  }) {
+    let user = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ googleId: profile.googleId }, { email: profile.email }],
+      },
+    });
+
+    if (user) {
+      if (!user.googleId) {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { googleId: profile.googleId },
+        });
+      }
+    } else {
+      user = await this.prisma.user.create({
+        data: {
+          email: profile.email,
+          name: profile.name,
+          googleId: profile.googleId,
+        },
+      });
+    }
+
+    return this.generateTokens(user.id, user.email);
+  }
+
   async revokeRefreshToken(tokenHash: string) {
     await this.prisma.refreshToken.updateMany({
       where: { tokenHash, revokedAt: null },

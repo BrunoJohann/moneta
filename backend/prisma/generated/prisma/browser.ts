@@ -73,6 +73,11 @@ export type ChatSession = Prisma.ChatSessionModel
  */
 export type ChatMessage = Prisma.ChatMessageModel
 /**
+ * Model CalendarEvent
+ * 
+ */
+export type CalendarEvent = Prisma.CalendarEventModel
+/**
  * Model AiProviderConfig
  * 
  */

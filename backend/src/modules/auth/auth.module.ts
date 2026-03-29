@@ -7,6 +7,7 @@ import { EmailModule } from '../email/email.module.js';
 import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
+import { GoogleStrategy } from './strategies/google.strategy.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @Module({
@@ -22,7 +23,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, JwtAuthGuard],
   exports: [JwtAuthGuard, AuthService],
 })
 export class AuthModule {}

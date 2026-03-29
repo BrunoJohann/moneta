@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api, type AiSettingsConfig, type AiProviderInfo } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
@@ -14,13 +15,20 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [settings, setSettings] = useState<AiSettingsConfig | null>(null);
   const [providers, setProviders] = useState<AiProviderInfo[]>([]);
   const [selectedProvider, setSelectedProvider] = useState<string>('openai');
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!loading && !user?.isAdmin) {
+      router.replace('/');
+    }
+  }, [loading, user, router]);
 
   useEffect(() => {
     async function load() {
@@ -59,7 +67,7 @@ export default function SettingsPage() {
     }
   }
 
-  if (isLoading) {
+  if (loading || !user?.isAdmin || isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />

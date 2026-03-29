@@ -62,6 +62,7 @@ export const ModelName = {
   AiInsight: 'AiInsight',
   ChatSession: 'ChatSession',
   ChatMessage: 'ChatMessage',
+  CalendarEvent: 'CalendarEvent',
   AiProviderConfig: 'AiProviderConfig'
 } as const
 
@@ -86,6 +87,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   name: 'name',
   phone: 'phone',
+  googleId: 'googleId',
   whatsappVerified: 'whatsappVerified',
   timezone: 'timezone',
   createdAt: 'createdAt',
@@ -232,6 +234,22 @@ export const ChatMessageScalarFieldEnum = {
 } as const
 
 export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const CalendarEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  allDay: 'allDay',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
 
 
 export const AiProviderConfigScalarFieldEnum = {

@@ -520,6 +520,60 @@ const aiSettings = {
   },
 };
 
+// --- Calendar Types ---
+
+export interface CalendarEvent {
+  id: string;
+  userId: string;
+  title: string;
+  description?: string;
+  startAt: string;
+  endAt?: string;
+  allDay: boolean;
+  location?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCalendarEventInput {
+  title: string;
+  description?: string;
+  startAt: string;
+  endAt?: string;
+  allDay?: boolean;
+  location?: string;
+}
+
+// --- Calendar Namespace ---
+
+const calendar = {
+  list(start: Date, end: Date) {
+    const params = new URLSearchParams({
+      start: start.toISOString(),
+      end: end.toISOString(),
+    });
+    return fetchApi<CalendarEvent[]>(`/calendar?${params.toString()}`);
+  },
+
+  create(data: CreateCalendarEventInput) {
+    return fetchApi<CalendarEvent>('/calendar', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  update(id: string, data: Partial<CreateCalendarEventInput>) {
+    return fetchApi<CalendarEvent>(`/calendar/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  delete(id: string) {
+    return fetchApi<void>(`/calendar/${id}`, { method: 'DELETE' });
+  },
+};
+
 export const api = {
   auth,
   messages,
@@ -533,4 +587,5 @@ export const api = {
   dashboard,
   chat,
   aiSettings,
+  calendar,
 };

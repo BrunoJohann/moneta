@@ -23,6 +23,9 @@ export class FallbackParserService {
     const reminder = this.tryReminder(normalized, text);
     if (reminder) return reminder;
 
+    const event = this.tryEvent(normalized, text);
+    if (event) return event;
+
     this.logger.warn(`Fallback parser could not parse: "${text}"`);
     return null;
   }
@@ -117,6 +120,59 @@ export class FallbackParserService {
         date: dayOfMonth ? null : new Date().toISOString().split('T')[0],
       },
       confidence: 0.6,
+      rawOutput: { source: 'fallback', original },
+    };
+  }
+
+  private tryEvent(normalized: string, original: string): ParseResult | null {
+    const keywords =
+      /(?:reuni[aã]o|consulta|dentista|m[eé]dico|evento|compromisso|anivers[aá]rio|agendar?|marcar?)/i;
+    if (!keywords.test(normalized)) return null;
+
+    // Extract time — order matters: most specific first
+    let hour: number | null = null;
+    const timeTests: Array<{ re: RegExp; fn: (m: RegExpExecArray) => number }> = [
+      { re: /(\d{1,2}):(\d{2})/, fn: (m) => Number(m[1]) },
+      { re: /(\d{1,2})\s*h(?:oras?)?\s*da\s*tarde/, fn: (m) => Number(m[1]) + 12 },
+      { re: /(\d{1,2})\s*h(?:oras?)?\s*da\s*noite/, fn: (m) => Number(m[1]) + 12 },
+      { re: /(\d{1,2})\s*h(?:oras?)?\s*da\s*manh[aã]/, fn: (m) => Number(m[1]) },
+      { re: /(\d{1,2})\s*h(?:oras?)?/, fn: (m) => Number(m[1]) },
+      { re: /(\d{1,2})\s*horas?\s*da\s*tarde/, fn: (m) => Number(m[1]) + 12 },
+    ];
+    for (const { re, fn } of timeTests) {
+      const m = re.exec(normalized);
+      if (m) { hour = fn(m); break; }
+    }
+
+    // Build date — naive ISO string (no timezone suffix) so the DB stores it as-is in UTC
+    const now = new Date();
+    const y = now.getUTCFullYear();
+    const mo = now.getUTCMonth();
+    let d = now.getUTCDate();
+    if (/amanh[aã]/.test(normalized)) d += 1;
+
+    const h = hour ?? 9;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const startAt = `${y}-${pad(mo + 1)}-${pad(d)}T${pad(h)}:00:00`;
+    const endAt   = `${y}-${pad(mo + 1)}-${pad(d)}T${pad(h + 1)}:00:00`;
+
+    // Build title: capitalize keyword + extract "com X" / "com a/o X" complement
+    const keywordMatch = keywords.exec(original);
+    const keyword = keywordMatch ? keywordMatch[0] : 'Compromisso';
+    const complement = /\bcom\s+(?:a\s+|o\s+|um\s+|uma\s+)?(.+)/i.exec(original);
+    const title = complement
+      ? `${keyword.charAt(0).toUpperCase() + keyword.slice(1).toLowerCase()} com ${complement[1].trim()}`
+      : keyword.charAt(0).toUpperCase() + keyword.slice(1).toLowerCase();
+
+    return {
+      action: 'create_event',
+      data: {
+        title,
+        startAt,
+        endAt,
+        allDay: hour === null,
+      },
+      confidence: 0.5,
       rawOutput: { source: 'fallback', original },
     };
   }

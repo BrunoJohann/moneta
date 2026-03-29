@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import type { ChatMessageInput, ChatResponse, IAiChatProvider } from '../interfaces/ai-chat-provider.interface.js';
+import type { ChatMessageInput, ChatResponse, IAiChatProvider, ToolDefinition } from '../interfaces/ai-chat-provider.interface.js';
 
 /**
  * Anthropic (Claude) chat adapter.
@@ -30,7 +30,8 @@ export class AnthropicChatAdapter implements IAiChatProvider {
     // this.client = new Anthropic({ apiKey: config.get<string>('anthropic.apiKey') });
   }
 
-  async chat(messages: ChatMessageInput[], model?: string): Promise<ChatResponse> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async chat(messages: ChatMessageInput[], model?: string, _tools?: ToolDefinition[]): Promise<ChatResponse> {
     // TODO: uncomment after installing @anthropic-ai/sdk
     throw new Error(
       'Anthropic adapter not fully configured. Install @anthropic-ai/sdk and set ANTHROPIC_API_KEY.',

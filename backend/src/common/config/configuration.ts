@@ -50,6 +50,10 @@ export const validationSchema = Joi.object({
   FRONTEND_URL: Joi.string().uri().required(),
   PORT: Joi.number().default(3001),
   ADMIN_EMAILS: Joi.string().default(''),
+
+  GOOGLE_CLIENT_ID: Joi.string().optional(),
+  GOOGLE_CLIENT_SECRET: Joi.string().optional(),
+  GOOGLE_CALLBACK_URL: Joi.string().optional(),
 });
 
 export interface AppConfig {
@@ -69,6 +73,7 @@ export interface AppConfig {
   frontendUrl: string;
   port: number;
   adminEmails: string[];
+  google: { clientId: string; clientSecret: string; callbackUrl: string };
 }
 
 export const configuration = (): AppConfig => ({
@@ -105,4 +110,11 @@ export const configuration = (): AppConfig => ({
     .split(',')
     .map((e) => e.trim())
     .filter(Boolean),
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+    callbackUrl:
+      process.env.GOOGLE_CALLBACK_URL ??
+      'http://localhost:3001/api/auth/google/callback',
+  },
 });

@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard,
   ArrowLeftRight,
-  Target,
+  CalendarDays,
+  LayoutDashboard,
   Lightbulb,
   MessageSquare,
 } from 'lucide-react';
@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/transactions', label: 'Transações', icon: ArrowLeftRight },
-  { href: '/goals', label: 'Metas', icon: Target },
+  { href: '/calendar', label: 'Agenda', icon: CalendarDays },
   { href: '/insights', label: 'Insights', icon: Lightbulb },
   { href: '/chat', label: 'Chat', icon: MessageSquare },
 ];

@@ -29,6 +29,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   name: string | null
   phone: string | null
+  googleId: string | null
   whatsappVerified: boolean | null
   timezone: string | null
   createdAt: Date | null
@@ -40,6 +41,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   name: string | null
   phone: string | null
+  googleId: string | null
   whatsappVerified: boolean | null
   timezone: string | null
   createdAt: Date | null
@@ -51,6 +53,7 @@ export type UserCountAggregateOutputType = {
   email: number
   name: number
   phone: number
+  googleId: number
   whatsappVerified: number
   timezone: number
   createdAt: number
@@ -64,6 +67,7 @@ export type UserMinAggregateInputType = {
   email?: true
   name?: true
   phone?: true
+  googleId?: true
   whatsappVerified?: true
   timezone?: true
   createdAt?: true
@@ -75,6 +79,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   name?: true
   phone?: true
+  googleId?: true
   whatsappVerified?: true
   timezone?: true
   createdAt?: true
@@ -86,6 +91,7 @@ export type UserCountAggregateInputType = {
   email?: true
   name?: true
   phone?: true
+  googleId?: true
   whatsappVerified?: true
   timezone?: true
   createdAt?: true
@@ -170,6 +176,7 @@ export type UserGroupByOutputType = {
   email: string
   name: string | null
   phone: string | null
+  googleId: string | null
   whatsappVerified: boolean
   timezone: string
   createdAt: Date
@@ -202,6 +209,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
+  googleId?: Prisma.StringNullableFilter<"User"> | string | null
   whatsappVerified?: Prisma.BoolFilter<"User"> | boolean
   timezone?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -215,6 +223,7 @@ export type UserWhereInput = {
   messageLogs?: Prisma.MessageLogListRelationFilter
   aiInsights?: Prisma.AiInsightListRelationFilter
   chatSessions?: Prisma.ChatSessionListRelationFilter
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -222,6 +231,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappVerified?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -235,12 +245,14 @@ export type UserOrderByWithRelationInput = {
   messageLogs?: Prisma.MessageLogOrderByRelationAggregateInput
   aiInsights?: Prisma.AiInsightOrderByRelationAggregateInput
   chatSessions?: Prisma.ChatSessionOrderByRelationAggregateInput
+  calendarEvents?: Prisma.CalendarEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
   phone?: string
+  googleId?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -258,13 +270,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   messageLogs?: Prisma.MessageLogListRelationFilter
   aiInsights?: Prisma.AiInsightListRelationFilter
   chatSessions?: Prisma.ChatSessionListRelationFilter
-}, "id" | "email" | "phone">
+  calendarEvents?: Prisma.CalendarEventListRelationFilter
+}, "id" | "email" | "phone" | "googleId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappVerified?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -282,6 +296,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  googleId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   whatsappVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   timezone?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -293,6 +308,7 @@ export type UserCreateInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -306,6 +322,7 @@ export type UserCreateInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -313,6 +330,7 @@ export type UserUncheckedCreateInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -326,6 +344,7 @@ export type UserUncheckedCreateInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -333,6 +352,7 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -346,6 +366,7 @@ export type UserUpdateInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -353,6 +374,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -366,6 +388,7 @@ export type UserUncheckedUpdateInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -373,6 +396,7 @@ export type UserCreateManyInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -384,6 +408,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -395,6 +420,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -406,6 +432,7 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
   whatsappVerified?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -417,6 +444,7 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
   whatsappVerified?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -428,6 +456,7 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
   whatsappVerified?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -590,11 +619,26 @@ export type UserUpdateOneRequiredWithoutChatSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChatSessionsInput, Prisma.UserUpdateWithoutChatSessionsInput>, Prisma.UserUncheckedUpdateWithoutChatSessionsInput>
 }
 
+export type UserCreateNestedOneWithoutCalendarEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCalendarEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCalendarEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCalendarEventsInput
+  upsert?: Prisma.UserUpsertWithoutCalendarEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCalendarEventsInput, Prisma.UserUpdateWithoutCalendarEventsInput>, Prisma.UserUncheckedUpdateWithoutCalendarEventsInput>
+}
+
 export type UserCreateWithoutAuthSessionsInput = {
   id?: string
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -607,6 +651,7 @@ export type UserCreateWithoutAuthSessionsInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthSessionsInput = {
@@ -614,6 +659,7 @@ export type UserUncheckedCreateWithoutAuthSessionsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -626,6 +672,7 @@ export type UserUncheckedCreateWithoutAuthSessionsInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthSessionsInput = {
@@ -649,6 +696,7 @@ export type UserUpdateWithoutAuthSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -661,6 +709,7 @@ export type UserUpdateWithoutAuthSessionsInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthSessionsInput = {
@@ -668,6 +717,7 @@ export type UserUncheckedUpdateWithoutAuthSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -680,6 +730,7 @@ export type UserUncheckedUpdateWithoutAuthSessionsInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRefreshTokensInput = {
@@ -687,6 +738,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -699,6 +751,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -706,6 +759,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -718,6 +772,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -741,6 +796,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -753,6 +809,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -760,6 +817,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -772,6 +830,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoriesInput = {
@@ -779,6 +838,7 @@ export type UserCreateWithoutCategoriesInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -791,6 +851,7 @@ export type UserCreateWithoutCategoriesInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoriesInput = {
@@ -798,6 +859,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -810,6 +872,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoriesInput = {
@@ -833,6 +896,7 @@ export type UserUpdateWithoutCategoriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -845,6 +909,7 @@ export type UserUpdateWithoutCategoriesInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoriesInput = {
@@ -852,6 +917,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -864,6 +930,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -871,6 +938,7 @@ export type UserCreateWithoutTransactionsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -883,6 +951,7 @@ export type UserCreateWithoutTransactionsInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -890,6 +959,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -902,6 +972,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -925,6 +996,7 @@ export type UserUpdateWithoutTransactionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -937,6 +1009,7 @@ export type UserUpdateWithoutTransactionsInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -944,6 +1017,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -956,6 +1030,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGoalsInput = {
@@ -963,6 +1038,7 @@ export type UserCreateWithoutGoalsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -975,6 +1051,7 @@ export type UserCreateWithoutGoalsInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGoalsInput = {
@@ -982,6 +1059,7 @@ export type UserUncheckedCreateWithoutGoalsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -994,6 +1072,7 @@ export type UserUncheckedCreateWithoutGoalsInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGoalsInput = {
@@ -1017,6 +1096,7 @@ export type UserUpdateWithoutGoalsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1029,6 +1109,7 @@ export type UserUpdateWithoutGoalsInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGoalsInput = {
@@ -1036,6 +1117,7 @@ export type UserUncheckedUpdateWithoutGoalsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1048,6 +1130,7 @@ export type UserUncheckedUpdateWithoutGoalsInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRemindersInput = {
@@ -1055,6 +1138,7 @@ export type UserCreateWithoutRemindersInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1067,6 +1151,7 @@ export type UserCreateWithoutRemindersInput = {
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRemindersInput = {
@@ -1074,6 +1159,7 @@ export type UserUncheckedCreateWithoutRemindersInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1086,6 +1172,7 @@ export type UserUncheckedCreateWithoutRemindersInput = {
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRemindersInput = {
@@ -1109,6 +1196,7 @@ export type UserUpdateWithoutRemindersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1121,6 +1209,7 @@ export type UserUpdateWithoutRemindersInput = {
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRemindersInput = {
@@ -1128,6 +1217,7 @@ export type UserUncheckedUpdateWithoutRemindersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1140,6 +1230,7 @@ export type UserUncheckedUpdateWithoutRemindersInput = {
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMessageLogsInput = {
@@ -1147,6 +1238,7 @@ export type UserCreateWithoutMessageLogsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1159,6 +1251,7 @@ export type UserCreateWithoutMessageLogsInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMessageLogsInput = {
@@ -1166,6 +1259,7 @@ export type UserUncheckedCreateWithoutMessageLogsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1178,6 +1272,7 @@ export type UserUncheckedCreateWithoutMessageLogsInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMessageLogsInput = {
@@ -1201,6 +1296,7 @@ export type UserUpdateWithoutMessageLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1213,6 +1309,7 @@ export type UserUpdateWithoutMessageLogsInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessageLogsInput = {
@@ -1220,6 +1317,7 @@ export type UserUncheckedUpdateWithoutMessageLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1232,6 +1330,7 @@ export type UserUncheckedUpdateWithoutMessageLogsInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAiInsightsInput = {
@@ -1239,6 +1338,7 @@ export type UserCreateWithoutAiInsightsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1251,6 +1351,7 @@ export type UserCreateWithoutAiInsightsInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAiInsightsInput = {
@@ -1258,6 +1359,7 @@ export type UserUncheckedCreateWithoutAiInsightsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1270,6 +1372,7 @@ export type UserUncheckedCreateWithoutAiInsightsInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAiInsightsInput = {
@@ -1293,6 +1396,7 @@ export type UserUpdateWithoutAiInsightsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1305,6 +1409,7 @@ export type UserUpdateWithoutAiInsightsInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiInsightsInput = {
@@ -1312,6 +1417,7 @@ export type UserUncheckedUpdateWithoutAiInsightsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1324,6 +1430,7 @@ export type UserUncheckedUpdateWithoutAiInsightsInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChatSessionsInput = {
@@ -1331,6 +1438,7 @@ export type UserCreateWithoutChatSessionsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1343,6 +1451,7 @@ export type UserCreateWithoutChatSessionsInput = {
   reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChatSessionsInput = {
@@ -1350,6 +1459,7 @@ export type UserUncheckedCreateWithoutChatSessionsInput = {
   email: string
   name?: string | null
   phone?: string | null
+  googleId?: string | null
   whatsappVerified?: boolean
   timezone?: string
   createdAt?: Date | string
@@ -1362,6 +1472,7 @@ export type UserUncheckedCreateWithoutChatSessionsInput = {
   reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
   messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
   aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChatSessionsInput = {
@@ -1385,6 +1496,7 @@ export type UserUpdateWithoutChatSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1397,6 +1509,7 @@ export type UserUpdateWithoutChatSessionsInput = {
   reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatSessionsInput = {
@@ -1404,6 +1517,7 @@ export type UserUncheckedUpdateWithoutChatSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1416,6 +1530,107 @@ export type UserUncheckedUpdateWithoutChatSessionsInput = {
   reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
   messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
   aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCalendarEventsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  phone?: string | null
+  googleId?: string | null
+  whatsappVerified?: boolean
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderCreateNestedManyWithoutUserInput
+  messageLogs?: Prisma.MessageLogCreateNestedManyWithoutUserInput
+  aiInsights?: Prisma.AiInsightCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCalendarEventsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  phone?: string | null
+  googleId?: string | null
+  whatsappVerified?: boolean
+  timezone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
+  reminders?: Prisma.ReminderUncheckedCreateNestedManyWithoutUserInput
+  messageLogs?: Prisma.MessageLogUncheckedCreateNestedManyWithoutUserInput
+  aiInsights?: Prisma.AiInsightUncheckedCreateNestedManyWithoutUserInput
+  chatSessions?: Prisma.ChatSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCalendarEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+}
+
+export type UserUpsertWithoutCalendarEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCalendarEventsInput, Prisma.UserUncheckedUpdateWithoutCalendarEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCalendarEventsInput, Prisma.UserUncheckedCreateWithoutCalendarEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCalendarEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCalendarEventsInput, Prisma.UserUncheckedUpdateWithoutCalendarEventsInput>
+}
+
+export type UserUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUpdateManyWithoutUserNestedInput
+  messageLogs?: Prisma.MessageLogUpdateManyWithoutUserNestedInput
+  aiInsights?: Prisma.AiInsightUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCalendarEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
+  reminders?: Prisma.ReminderUncheckedUpdateManyWithoutUserNestedInput
+  messageLogs?: Prisma.MessageLogUncheckedUpdateManyWithoutUserNestedInput
+  aiInsights?: Prisma.AiInsightUncheckedUpdateManyWithoutUserNestedInput
+  chatSessions?: Prisma.ChatSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1433,6 +1648,7 @@ export type UserCountOutputType = {
   messageLogs: number
   aiInsights: number
   chatSessions: number
+  calendarEvents: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1445,6 +1661,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   messageLogs?: boolean | UserCountOutputTypeCountMessageLogsArgs
   aiInsights?: boolean | UserCountOutputTypeCountAiInsightsArgs
   chatSessions?: boolean | UserCountOutputTypeCountChatSessionsArgs
+  calendarEvents?: boolean | UserCountOutputTypeCountCalendarEventsArgs
 }
 
 /**
@@ -1520,12 +1737,20 @@ export type UserCountOutputTypeCountChatSessionsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.ChatSessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCalendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CalendarEventWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
   name?: boolean
   phone?: boolean
+  googleId?: boolean
   whatsappVerified?: boolean
   timezone?: boolean
   createdAt?: boolean
@@ -1539,6 +1764,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   messageLogs?: boolean | Prisma.User$messageLogsArgs<ExtArgs>
   aiInsights?: boolean | Prisma.User$aiInsightsArgs<ExtArgs>
   chatSessions?: boolean | Prisma.User$chatSessionsArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.User$calendarEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1547,6 +1773,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   name?: boolean
   phone?: boolean
+  googleId?: boolean
   whatsappVerified?: boolean
   timezone?: boolean
   createdAt?: boolean
@@ -1558,6 +1785,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   name?: boolean
   phone?: boolean
+  googleId?: boolean
   whatsappVerified?: boolean
   timezone?: boolean
   createdAt?: boolean
@@ -1569,13 +1797,14 @@ export type UserSelectScalar = {
   email?: boolean
   name?: boolean
   phone?: boolean
+  googleId?: boolean
   whatsappVerified?: boolean
   timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "phone" | "whatsappVerified" | "timezone" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "phone" | "googleId" | "whatsappVerified" | "timezone" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   authSessions?: boolean | Prisma.User$authSessionsArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
@@ -1586,6 +1815,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   messageLogs?: boolean | Prisma.User$messageLogsArgs<ExtArgs>
   aiInsights?: boolean | Prisma.User$aiInsightsArgs<ExtArgs>
   chatSessions?: boolean | Prisma.User$chatSessionsArgs<ExtArgs>
+  calendarEvents?: boolean | Prisma.User$calendarEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1603,12 +1833,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     messageLogs: Prisma.$MessageLogPayload<ExtArgs>[]
     aiInsights: Prisma.$AiInsightPayload<ExtArgs>[]
     chatSessions: Prisma.$ChatSessionPayload<ExtArgs>[]
+    calendarEvents: Prisma.$CalendarEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
     name: string | null
     phone: string | null
+    googleId: string | null
     whatsappVerified: boolean
     timezone: string
     createdAt: Date
@@ -2016,6 +2248,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   messageLogs<T extends Prisma.User$messageLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messageLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiInsights<T extends Prisma.User$aiInsightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiInsightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiInsightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   chatSessions<T extends Prisma.User$chatSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  calendarEvents<T extends Prisma.User$calendarEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$calendarEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2049,6 +2282,7 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
+  readonly googleId: Prisma.FieldRef<"User", 'String'>
   readonly whatsappVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly timezone: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -2654,6 +2888,30 @@ export type User$chatSessionsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ChatSessionScalarFieldEnum | Prisma.ChatSessionScalarFieldEnum[]
+}
+
+/**
+ * User.calendarEvents
+ */
+export type User$calendarEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CalendarEvent
+   */
+  select?: Prisma.CalendarEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CalendarEvent
+   */
+  omit?: Prisma.CalendarEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CalendarEventInclude<ExtArgs> | null
+  where?: Prisma.CalendarEventWhereInput
+  orderBy?: Prisma.CalendarEventOrderByWithRelationInput | Prisma.CalendarEventOrderByWithRelationInput[]
+  cursor?: Prisma.CalendarEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CalendarEventScalarFieldEnum | Prisma.CalendarEventScalarFieldEnum[]
 }
 
 /**

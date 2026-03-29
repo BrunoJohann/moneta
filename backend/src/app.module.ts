@@ -28,6 +28,7 @@ import { MessagingModule } from './modules/messaging/messaging.module.js';
 import { WhatsAppModule } from './modules/whatsapp/whatsapp.module.js';
 import { ChatModule } from './modules/chat/chat.module.js';
 import { AiSettingsModule } from './modules/ai-settings/ai-settings.module.js';
+import { CalendarModule } from './modules/calendar/calendar.module.js';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard.js';
 
 @Module({
@@ -73,6 +74,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard.js';
     WhatsAppModule,
     ChatModule,
     AiSettingsModule,
+    CalendarModule,
   ],
   providers: [
     {

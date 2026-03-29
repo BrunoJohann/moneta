@@ -1,13 +1,14 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
+import type { ChatCompletionMessageParam } from 'openai/resources/chat/completions.js';
 
-import type { ChatMessageInput, ChatResponse, IAiChatProvider } from '../interfaces/ai-chat-provider.interface.js';
-
-export const OPENAI_CHAT_SYSTEM_PROMPT = `Você é Moneta, um assistente financeiro pessoal inteligente.
-Ajude o usuário a entender suas finanças, responder dúvidas sobre gastos, receitas, metas e orçamento.
-Seja objetivo, amigável e use formatação clara. Responda sempre em português brasileiro.
-Quando o usuário mencionar um gasto, receita, meta ou lembrete (ex: "gastei 50 reais em pastel", "recebi 2000 de salário"), confirme que você registrou automaticamente. Exemplo: "Registrei o gasto de R$ 50,00 em Alimentação! ✓". Se a mensagem for apenas uma pergunta ou conversa, responda normalmente sem mencionar nenhum registro.`;
+import type {
+  ChatMessageInput,
+  ChatResponse,
+  IAiChatProvider,
+  ToolDefinition,
+} from '../interfaces/ai-chat-provider.interface.js';
 
 export class OpenAiChatAdapter implements IAiChatProvider {
   private readonly logger = new Logger(OpenAiChatAdapter.name);
@@ -23,20 +24,59 @@ export class OpenAiChatAdapter implements IAiChatProvider {
     });
   }
 
-  async chat(messages: ChatMessageInput[], model?: string): Promise<ChatResponse> {
+  async chat(messages: ChatMessageInput[], model?: string, tools?: ToolDefinition[]): Promise<ChatResponse> {
     const selectedModel = model ?? this.defaultModel;
+
+    const openAiMessages: ChatCompletionMessageParam[] = messages.map((m) => {
+      if (m.role === 'tool') {
+        return { role: 'tool', tool_call_id: m.toolCallId!, content: m.content ?? '' };
+      }
+      if (m.role === 'assistant' && m.toolCalls?.length) {
+        return {
+          role: 'assistant',
+          content: m.content,
+          tool_calls: m.toolCalls.map((tc) => ({
+            id: tc.id,
+            type: 'function' as const,
+            function: { name: tc.name, arguments: JSON.stringify(tc.arguments) },
+          })),
+        };
+      }
+      return { role: m.role as 'user' | 'system' | 'assistant', content: m.content ?? '' };
+    });
 
     const completion = await this.openai.chat.completions.create({
       model: selectedModel,
-      messages,
+      messages: openAiMessages,
       temperature: 0.7,
+      ...(tools?.length
+        ? {
+            tools: tools.map((t) => ({
+              type: 'function' as const,
+              function: { name: t.name, description: t.description, parameters: t.parameters },
+            })),
+            tool_choice: 'auto' as const,
+          }
+        : {}),
     });
 
     const choice = completion.choices[0];
+    const toolCalls = choice.message.tool_calls?.map((tc) => {
+      const fn = 'function' in tc ? tc.function : null;
+      return {
+        id: tc.id,
+        name: fn?.name ?? '',
+        arguments: (() => {
+          try { return JSON.parse(fn?.arguments ?? '{}') as Record<string, unknown>; }
+          catch { return {} as Record<string, unknown>; }
+        })(),
+      };
+    });
 
     return {
-      content: choice.message.content ?? '',
+      content: choice.message.content ?? null,
       model: completion.model,
+      toolCalls: toolCalls?.length ? toolCalls : undefined,
       usage: completion.usage
         ? {
             promptTokens: completion.usage.prompt_tokens,
@@ -50,7 +90,6 @@ export class OpenAiChatAdapter implements IAiChatProvider {
     const extension = mimeType.includes('webm') ? 'webm' : mimeType.includes('mp4') ? 'mp4' : 'wav';
     const filename = `audio.${extension}`;
 
-    // Copy to a plain ArrayBuffer to satisfy the BlobPart type constraint
     const arrayBuffer = audioBuffer.buffer.slice(
       audioBuffer.byteOffset,
       audioBuffer.byteOffset + audioBuffer.byteLength,

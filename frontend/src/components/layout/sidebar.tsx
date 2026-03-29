@@ -9,6 +9,7 @@ import {
   Target,
   Lightbulb,
   MessageSquare,
+  CalendarDays,
   Settings,
   LogOut,
   Moon,
@@ -27,7 +28,7 @@ const navItems = [
   { href: '/goals', label: 'Metas', icon: Target },
   { href: '/insights', label: 'Insights', icon: Lightbulb },
   { href: '/chat', label: 'Chat', icon: MessageSquare },
-  { href: '/settings', label: 'Configurações', icon: Settings },
+  { href: '/calendar', label: 'Calendário', icon: CalendarDays },
 ];
 
 export function Sidebar() {
@@ -54,7 +55,7 @@ export function Sidebar() {
       <Separator />
 
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {navItems.map((item) => {
+        {[...navItems, ...(user?.isAdmin ? [{ href: '/settings', label: 'Configurações', icon: Settings }] : [])].map((item) => {
           const isActive =
             item.href === '/'
               ? pathname === '/'
