@@ -146,10 +146,20 @@ export class ChatService {
 
   private async buildSystemPrompt(userId: string): Promise<string> {
     const now = new Date();
-    const today = now.toISOString().split('T')[0];
 
-    const startOfToday = new Date(now);
-    startOfToday.setHours(0, 0, 0, 0);
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { timezone: true } });
+    const tz = user?.timezone ?? 'America/Sao_Paulo';
+
+    const localDate = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: tz }).format(d);
+    const localTime = (d: Date) =>
+      new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
+
+    const today = localDate(now);
+
+    // Midnight in user's timezone as a UTC Date
+    const tzNow = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+    const offsetMs = now.getTime() - tzNow.getTime();
+    const startOfToday = new Date(new Date(today + 'T00:00:00Z').getTime() + offsetMs);
 
     const [transactions, goals, upcomingEvents] = await Promise.all([
       this.prisma.transaction.findMany({
@@ -170,7 +180,7 @@ export class ChatService {
 
     if (transactions.length > 0) {
       const lines = transactions.map((t) => {
-        const date = t.date.toISOString().split('T')[0];
+        const date = localDate(t.date);
         const type = t.type === 'INCOME' ? 'RECEITA' : 'DESPESA';
         const cat = t.category?.name ?? '';
         return `[id:${t.id}] ${date} ${type} R$${t.amount} "${t.description}"${cat ? ` (${cat})` : ''}`;
@@ -180,7 +190,7 @@ export class ChatService {
 
     if (goals.length > 0) {
       const lines = goals.map((g) => {
-        const deadline = g.deadline ? ` prazo:${g.deadline.toISOString().split('T')[0]}` : '';
+        const deadline = g.deadline ? ` prazo:${localDate(g.deadline)}` : '';
         return `[id:${g.id}] "${g.title}" R$${g.currentAmount}/${g.targetAmount}${deadline}`;
       });
       prompt += `\n\nMetas ativas:\n${lines.join('\n')}`;
@@ -188,8 +198,8 @@ export class ChatService {
 
     if (upcomingEvents.length > 0) {
       const lines = upcomingEvents.map((e) => {
-        const date = e.startAt.toISOString().split('T')[0];
-        const time = e.allDay ? '' : ` ${e.startAt.toISOString().split('T')[1].slice(0, 5)}`;
+        const date = localDate(e.startAt);
+        const time = e.allDay ? '' : ` ${localTime(e.startAt)}`;
         return `[id:${e.id}] ${date}${time} "${e.title}"${e.location ? ` (${e.location})` : ''}`;
       });
       prompt += `\n\nAgenda próximos 14 dias:\n${lines.join('\n')}`;
