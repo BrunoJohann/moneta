@@ -160,59 +160,63 @@ export class ChatService {
     const tzNow = new Date(now.toLocaleString('en-US', { timeZone: tz }));
     const offsetMs = now.getTime() - tzNow.getTime();
     const startOfToday = new Date(new Date(today + 'T00:00:00Z').getTime() + offsetMs);
+    const startOfMonth = new Date(new Date(today.slice(0, 7) + '-01T00:00:00Z').getTime() + offsetMs);
 
-    const [transactions, goals, upcomingEvents] = await Promise.all([
-      this.prisma.transaction.findMany({
-        where: { userId },
-        orderBy: { date: 'desc' },
-        take: 10,
-        include: { category: { select: { name: true } } },
+    const [monthTotals, goalCount, nextEvents] = await Promise.all([
+      this.prisma.transaction.groupBy({
+        by: ['type'],
+        where: { userId, date: { gte: startOfMonth, lte: now } },
+        _sum: { amount: true },
       }),
-      this.prisma.goal.findMany({
-        where: { userId, status: 'ACTIVE' },
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-      }),
-      this.calendarService.list(userId, new Date(startOfToday.getTime() - 7 * 86_400_000), new Date(now.getTime() + 14 * 86_400_000)),
+      this.prisma.goal.count({ where: { userId, status: 'ACTIVE' } }),
+      this.calendarService.list(userId, startOfToday, new Date(startOfToday.getTime() + 7 * 86_400_000)),
     ]);
+
+    const income = monthTotals.find((r) => r.type === 'INCOME')?._sum.amount ?? 0;
+    const expenses = monthTotals.find((r) => r.type === 'EXPENSE')?._sum.amount ?? 0;
+    const balance = Number(income) - Number(expenses);
 
     let prompt = `${CHAT_SYSTEM_PROMPT}\n\nData atual: ${today}`;
 
-    if (transactions.length > 0) {
-      const lines = transactions.map((t) => {
-        const date = localDate(t.date);
-        const type = t.type === 'INCOME' ? 'RECEITA' : 'DESPESA';
-        const cat = t.category?.name ?? '';
-        return `[id:${t.id}] ${date} ${type} R$${t.amount} "${t.description}"${cat ? ` (${cat})` : ''}`;
-      });
-      prompt += `\n\nTransações recentes (últimas ${transactions.length}):\n${lines.join('\n')}`;
+    prompt += `\n\nResumo do mês atual:`
+      + `\n- Receitas: R$${Number(income).toFixed(2)}`
+      + `\n- Despesas: R$${Number(expenses).toFixed(2)}`
+      + `\n- Saldo: R$${balance.toFixed(2)}`;
+
+    if (goalCount > 0) {
+      prompt += `\n\nMetas ativas: ${goalCount} (use get_goals para detalhes)`;
     }
 
-    if (goals.length > 0) {
-      const lines = goals.map((g) => {
-        const deadline = g.deadline ? ` prazo:${localDate(g.deadline)}` : '';
-        return `[id:${g.id}] "${g.title}" R$${g.currentAmount}/${g.targetAmount}${deadline}`;
-      });
-      prompt += `\n\nMetas ativas:\n${lines.join('\n')}`;
-    }
-
-    if (upcomingEvents.length > 0) {
-      const lines = upcomingEvents.map((e) => {
+    if (nextEvents.length > 0) {
+      const lines = nextEvents.slice(0, 3).map((e) => {
         const date = localDate(e.startAt);
         const time = e.allDay ? '' : ` ${localTime(e.startAt)}`;
-        return `[id:${e.id}] ${date}${time} "${e.title}"${e.location ? ` (${e.location})` : ''}`;
+        return `[id:${e.id}] ${date}${time} "${e.title}"`;
       });
-      prompt += `\n\nAgenda (últimos 7 dias e próximos 14 dias):\n${lines.join('\n')}`;
+      prompt += `\n\nPróximos compromissos:\n${lines.join('\n')}`;
+      if (nextEvents.length > 3) {
+        prompt += `\n(+${nextEvents.length - 3} mais — use search_events para ver todos)`;
+      }
     }
 
+    prompt += `\n\nPara dados históricos ou detalhados use: search_transactions, search_events, get_goals.`;
+
     return prompt;
+  }
+
+  private tzUtils(tz: string) {
+    return {
+      localDate: (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: tz }).format(d),
+      localTime: (d: Date) =>
+        new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).format(d),
+    };
   }
 
   private async executeToolCall(
     userId: string,
     name: string,
     args: Record<string, unknown>,
-  ): Promise<{ success: boolean; message: string; id?: string }> {
+  ): Promise<{ success: boolean; message: string; id?: string; data?: unknown }> {
     try {
       switch (name) {
         case 'create_transaction': {
@@ -327,6 +331,74 @@ export class ChatService {
             },
           });
           return { success: true, message: `Lembrete criado com id ${reminder.id}`, id: reminder.id };
+        }
+
+        case 'search_transactions': {
+          const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { timezone: true } });
+          const tz = user?.timezone ?? 'America/Sao_Paulo';
+          const { localDate } = this.tzUtils(tz);
+          const where: Record<string, unknown> = { userId };
+          if (args.startDate || args.endDate) {
+            where.date = {
+              ...(args.startDate ? { gte: new Date(args.startDate as string) } : {}),
+              ...(args.endDate ? { lte: new Date(args.endDate as string) } : {}),
+            };
+          }
+          if (args.type) where.type = args.type;
+          const txs = await this.prisma.transaction.findMany({
+            where,
+            orderBy: { date: 'desc' },
+            take: (args.limit as number) ?? 20,
+            include: { category: { select: { name: true } } },
+          });
+          const data = txs.map((t) => ({
+            id: t.id,
+            date: localDate(t.date),
+            type: t.type,
+            amount: Number(t.amount),
+            description: t.description,
+            category: t.category?.name ?? null,
+          }));
+          return { success: true, message: `${data.length} transações encontradas`, data };
+        }
+
+        case 'search_events': {
+          const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { timezone: true } });
+          const tz = user?.timezone ?? 'America/Sao_Paulo';
+          const { localDate, localTime } = this.tzUtils(tz);
+          const evts = await this.calendarService.list(
+            userId,
+            new Date(args.startDate as string),
+            new Date(args.endDate as string),
+          );
+          const data = evts.map((e) => ({
+            id: e.id,
+            date: localDate(e.startAt),
+            time: e.allDay ? null : localTime(e.startAt),
+            allDay: e.allDay,
+            title: e.title,
+            location: e.location ?? null,
+            description: e.description ?? null,
+          }));
+          return { success: true, message: `${data.length} eventos encontrados`, data };
+        }
+
+        case 'get_goals': {
+          const status = (args.status as string | undefined) ?? 'ACTIVE';
+          const goals = await this.prisma.goal.findMany({
+            where: { userId, status: status as 'ACTIVE' | 'COMPLETED' | 'CANCELLED' },
+            orderBy: { createdAt: 'desc' },
+          });
+          const data = goals.map((g) => ({
+            id: g.id,
+            title: g.title,
+            targetAmount: Number(g.targetAmount),
+            currentAmount: Number(g.currentAmount),
+            progress: Number(g.targetAmount) > 0 ? Math.round((Number(g.currentAmount) / Number(g.targetAmount)) * 100) : 0,
+            deadline: g.deadline?.toISOString().split('T')[0] ?? null,
+            status: g.status,
+          }));
+          return { success: true, message: `${data.length} metas encontradas`, data };
         }
 
         default:

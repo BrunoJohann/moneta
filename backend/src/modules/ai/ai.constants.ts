@@ -184,8 +184,10 @@ Quando o usuário mencionar um gasto, receita, meta, lembrete ou evento de agend
 - "Adicionei 'Reunião com João' ao seu calendário para amanhã às 15h! ✓"
 - "Meta 'Viagem' criada com valor alvo de R$ 5.000,00! ✓"
 
-Se o usuário pedir para alterar ou apagar um registro, use as funções de update/delete passando o ID mostrado no contexto.
+Se o usuário pedir para alterar ou apagar um registro, use as funções de update/delete passando o ID fornecido nos dados.
 Se a mensagem for apenas uma pergunta ou conversa, responda normalmente sem chamar nenhuma função.
+
+Para perguntas sobre histórico de transações, eventos passados ou detalhes de metas, use as ferramentas de busca (search_transactions, search_events, get_goals) em vez de dizer que não tem acesso aos dados.
 
 Valores monetários: "50 reais" → 50, "3mil" → 3000, "1.500" → 1500.
 Datas relativas: "hoje" = data atual, "ontem" = dia anterior, "amanhã" = dia seguinte.
@@ -320,6 +322,44 @@ export const CHAT_TOOL_DEFINITIONS: ToolDefinition[] = [
         date: { type: ['string', 'null'], description: 'YYYY-MM-DD para ONCE' },
       },
       required: ['title', 'recurrenceType'],
+    },
+  },
+  // ── Read ────────────────────────────────────────────────────────────────────
+  {
+    name: 'search_transactions',
+    description: 'Busca transações financeiras do usuário com filtros opcionais. Use para responder perguntas sobre gastos, receitas ou histórico financeiro.',
+    parameters: {
+      type: 'object',
+      properties: {
+        startDate: { type: 'string', description: 'Data inicial no formato YYYY-MM-DD (inclusive)' },
+        endDate: { type: 'string', description: 'Data final no formato YYYY-MM-DD (inclusive)' },
+        type: { type: 'string', enum: ['INCOME', 'EXPENSE'], description: 'Filtrar por tipo (opcional)' },
+        limit: { type: 'integer', description: 'Número máximo de resultados (padrão: 20)' },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'search_events',
+    description: 'Busca eventos da agenda do usuário em um intervalo de datas. Use para responder perguntas sobre compromissos passados ou futuros.',
+    parameters: {
+      type: 'object',
+      properties: {
+        startDate: { type: 'string', description: 'Data inicial no formato YYYY-MM-DD (inclusive)' },
+        endDate: { type: 'string', description: 'Data final no formato YYYY-MM-DD (inclusive)' },
+      },
+      required: ['startDate', 'endDate'],
+    },
+  },
+  {
+    name: 'get_goals',
+    description: 'Retorna as metas financeiras do usuário com progresso detalhado.',
+    parameters: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', enum: ['ACTIVE', 'COMPLETED', 'CANCELLED'], description: 'Filtrar por status (padrão: ACTIVE)' },
+      },
+      required: [],
     },
   },
 ];
