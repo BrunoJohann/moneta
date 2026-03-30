@@ -39,7 +39,7 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard.js';
       validationSchema,
     }),
 
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 300 }]),
 
     ScheduleModule.forRoot(),
 

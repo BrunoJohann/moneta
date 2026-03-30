@@ -38,17 +38,18 @@ export default function SettingsPage() {
   useEffect(() => {
     async function load() {
       try {
-        const [cfg, providerList, transcriptionList] = await Promise.all([
-          api.aiSettings.get(),
-          api.aiSettings.listProviders(),
-          api.aiSettings.listTranscriptionProviders(),
-        ]);
+        const cfg = await api.aiSettings.get();
         setSettings(cfg);
-        setProviders(providerList);
-        setTranscriptionProviders(transcriptionList);
         setSelectedProvider(cfg.provider.toLowerCase());
         setSelectedModel(cfg.model ?? '');
-        setSelectedTranscriptionProvider(cfg.transcriptionProvider.toLowerCase());
+        setSelectedTranscriptionProvider((cfg.transcriptionProvider ?? 'OPENAI').toLowerCase());
+
+        const [providerList, transcriptionList] = await Promise.all([
+          api.aiSettings.listProviders().catch(() => [] as typeof providers),
+          api.aiSettings.listTranscriptionProviders().catch(() => [] as typeof transcriptionProviders),
+        ]);
+        setProviders(providerList);
+        setTranscriptionProviders(transcriptionList);
       } catch {
         toast.error('Erro ao carregar configurações');
       } finally {
