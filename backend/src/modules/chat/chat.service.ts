@@ -173,7 +173,7 @@ export class ChatService {
         orderBy: { createdAt: 'desc' },
         take: 5,
       }),
-      this.calendarService.list(userId, startOfToday, new Date(now.getTime() + 14 * 86_400_000)),
+      this.calendarService.list(userId, new Date(startOfToday.getTime() - 7 * 86_400_000), new Date(now.getTime() + 14 * 86_400_000)),
     ]);
 
     let prompt = `${CHAT_SYSTEM_PROMPT}\n\nData atual: ${today}`;
@@ -202,7 +202,7 @@ export class ChatService {
         const time = e.allDay ? '' : ` ${localTime(e.startAt)}`;
         return `[id:${e.id}] ${date}${time} "${e.title}"${e.location ? ` (${e.location})` : ''}`;
       });
-      prompt += `\n\nAgenda próximos 14 dias:\n${lines.join('\n')}`;
+      prompt += `\n\nAgenda (últimos 7 dias e próximos 14 dias):\n${lines.join('\n')}`;
     }
 
     return prompt;
