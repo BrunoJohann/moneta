@@ -148,6 +148,9 @@ export class ChatService {
     const now = new Date();
     const today = now.toISOString().split('T')[0];
 
+    const startOfToday = new Date(now);
+    startOfToday.setHours(0, 0, 0, 0);
+
     const [transactions, goals, upcomingEvents] = await Promise.all([
       this.prisma.transaction.findMany({
         where: { userId },
@@ -160,7 +163,7 @@ export class ChatService {
         orderBy: { createdAt: 'desc' },
         take: 5,
       }),
-      this.calendarService.list(userId, now, new Date(now.getTime() + 14 * 86_400_000)),
+      this.calendarService.list(userId, startOfToday, new Date(now.getTime() + 14 * 86_400_000)),
     ]);
 
     let prompt = `${CHAT_SYSTEM_PROMPT}\n\nData atual: ${today}`;
