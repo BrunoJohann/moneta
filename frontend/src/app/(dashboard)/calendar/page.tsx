@@ -44,6 +44,10 @@ export default function CalendarPage() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Day view dialog state
+  const [dayViewOpen, setDayViewOpen] = useState(false);
+  const [dayViewDay, setDayViewDay] = useState<Date | null>(null);
+
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
@@ -96,6 +100,12 @@ export default function CalendarPage() {
 
   function eventsForDay(day: Date) {
     return events.filter((e) => isSameDay(parseISO(e.startAt), day));
+  }
+
+  function openDayView(day: Date, stopPropagation: () => void) {
+    stopPropagation();
+    setDayViewDay(day);
+    setDayViewOpen(true);
   }
 
   function openNewEvent(day: Date) {
@@ -259,9 +269,12 @@ export default function CalendarPage() {
                     </button>
                   ))}
                   {dayEvents.length > 3 && (
-                    <span className="text-[10px] text-muted-foreground pl-1">
+                    <button
+                      onClick={(ev) => openDayView(day, () => ev.stopPropagation())}
+                      className="text-[10px] text-muted-foreground pl-1 text-left hover:text-foreground transition-colors"
+                    >
                       +{dayEvents.length - 3} mais
-                    </span>
+                    </button>
                   )}
                 </div>
               </div>
@@ -269,6 +282,53 @@ export default function CalendarPage() {
           })}
         </div>
       </div>
+
+      {/* Day View Dialog */}
+      <Dialog open={dayViewOpen} onOpenChange={setDayViewOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>
+              {dayViewDay && format(dayViewDay, "EEEE, d 'de' MMMM", { locale: ptBR })}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-1.5 pt-1">
+            {dayViewDay && eventsForDay(dayViewDay).map((e) => (
+              <button
+                key={e.id}
+                onClick={() => {
+                  setDayViewOpen(false);
+                  openEditEvent(e, () => {});
+                }}
+                className="flex items-start gap-2 rounded-lg border px-3 py-2 text-left text-sm hover:bg-accent transition-colors"
+              >
+                <span className="mt-0.5 text-xs text-muted-foreground w-10 shrink-0">
+                  {e.allDay ? "dia int." : format(parseISO(e.startAt), "HH:mm")}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">{e.title}</p>
+                  {e.location && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-0.5 mt-0.5">
+                      <MapPin className="h-2.5 w-2.5" />{e.location}
+                    </p>
+                  )}
+                </div>
+              </button>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => {
+                setDayViewOpen(false);
+                if (dayViewDay) openNewEvent(dayViewDay);
+              }}
+            >
+              <Plus className="h-3.5 w-3.5 mr-1" />
+              Novo evento
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Event Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
