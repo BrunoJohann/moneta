@@ -102,12 +102,6 @@ export default function CalendarPage() {
     return events.filter((e) => isSameDay(parseISO(e.startAt), day));
   }
 
-  function openDayView(day: Date, stopPropagation: () => void) {
-    stopPropagation();
-    setDayViewDay(day);
-    setDayViewOpen(true);
-  }
-
   function openNewEvent(day: Date) {
     setSelectedEvent(null);
     setSelectedDay(day);
@@ -239,7 +233,7 @@ export default function CalendarPage() {
             return (
               <div
                 key={idx}
-                onClick={() => openNewEvent(day)}
+                onClick={() => { setDayViewDay(day); setDayViewOpen(true); }}
                 className={cn(
                   "min-h-[80px] md:min-h-[100px] p-1.5 border-b border-r cursor-pointer hover:bg-accent/40 transition-colors",
                   !isCurrentMonth && "opacity-40",
@@ -260,7 +254,7 @@ export default function CalendarPage() {
                   {dayEvents.slice(0, 3).map((e) => (
                     <button
                       key={e.id}
-                      onClick={(ev) => openEditEvent(e, () => ev.stopPropagation())}
+                      onClick={(ev) => { ev.stopPropagation(); openEditEvent(e, () => {}); }}
                       className="w-full truncate rounded bg-primary/15 px-1 py-0.5 text-left text-[10px] font-medium text-primary hover:bg-primary/25 transition-colors"
                     >
                       {!e.allDay &&
@@ -269,12 +263,9 @@ export default function CalendarPage() {
                     </button>
                   ))}
                   {dayEvents.length > 3 && (
-                    <button
-                      onClick={(ev) => openDayView(day, () => ev.stopPropagation())}
-                      className="text-[10px] text-muted-foreground pl-1 text-left hover:text-foreground transition-colors"
-                    >
+                    <span className="text-[10px] text-muted-foreground pl-1">
                       +{dayEvents.length - 3} mais
-                    </button>
+                    </span>
                   )}
                 </div>
               </div>
